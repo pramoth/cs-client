@@ -57,7 +57,7 @@ public class BilpaymentClientTest {
     private OkHttpClient createOkHttpClient(String username,String password) {
         //Logging Intercepter
         HttpLoggingInterceptor bodyLog = new HttpLoggingInterceptor();
-        bodyLog.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        bodyLog.setLevel(HttpLoggingInterceptor.Level.BODY);
         //Create Http client
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(bodyLog)
