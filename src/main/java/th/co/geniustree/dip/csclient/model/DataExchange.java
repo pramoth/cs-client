@@ -5,8 +5,6 @@
  */
 package th.co.geniustree.dip.csclient.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import java.time.LocalDateTime;
 
 /**
@@ -14,11 +12,7 @@ import java.time.LocalDateTime;
  * @author pramoth
  */
 public class DataExchange extends DataExchangeBase {
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime paymentDateTime;
     
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime confirmDateTime;
 
     private ResponseStatus status;
@@ -29,14 +23,6 @@ public class DataExchange extends DataExchangeBase {
 
     public DataExchange() {
 
-    }
-
-    public LocalDateTime getPaymentDateTime() {
-        return paymentDateTime;
-    }
-
-    public void setPaymentDateTime(LocalDateTime paymentDateTime) {
-        this.paymentDateTime = paymentDateTime;
     }
 
     public LocalDateTime getConfirmDateTime() {

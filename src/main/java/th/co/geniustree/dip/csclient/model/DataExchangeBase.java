@@ -5,8 +5,6 @@
  */
 package th.co.geniustree.dip.csclient.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -21,9 +19,8 @@ public class DataExchangeBase {
     private String reference2;
 
     private BigDecimal amount;
-    
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime paymentDateTime = LocalDateTime.now();
+
+    private LocalDateTime paymentDateTime;
 
     private String txId;
 
