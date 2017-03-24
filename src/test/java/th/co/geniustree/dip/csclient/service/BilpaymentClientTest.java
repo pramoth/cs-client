@@ -8,12 +8,18 @@ package th.co.geniustree.dip.csclient.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Base64;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -38,18 +44,18 @@ import th.co.geniustree.dip.csclient.model.DataResponse;
  * @author pramoth
  */
 public class BilpaymentClientTest {
-
+    public static final DateTimeFormatter ISO_DATE_OPTIONAL_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     private BilpaymentClient billpaymentService;
 
     @Before
     public void setUp() {
         //For logging.You may dont need.
-        OkHttpClient client = createOkHttpClient("","");
+        OkHttpClient client = createOkHttpClient("counterservice","password123");
        
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://epayment.ipthailand.go.th")
                 .client(client)
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create(createObjectMapper()))
                 .build();
         billpaymentService = retrofit.create(BilpaymentClient.class);
     }
@@ -119,6 +125,18 @@ public class BilpaymentClientTest {
         } else {
             System.out.println("Handle error here");
         }
+    }
+/**
+ * Create custom ObjectMapper with custom DateSeriallizer format yyyy-MM-dd'T'HH:mm:ss
+ * @return 
+ */
+    private ObjectMapper createObjectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(LocalDateTime.class,new LocalDateTimeSerializer(ISO_DATE_OPTIONAL_TIME));
+        module.addDeserializer(LocalDateTime.class,new LocalDateTimeDeserializer(ISO_DATE_OPTIONAL_TIME));
+        mapper.registerModule(module);
+        return mapper;
     }
 
 }
